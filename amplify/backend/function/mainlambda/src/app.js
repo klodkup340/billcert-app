@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
  **********************/
 
 app.get('/item', function(req, res) {
-  const data = [{name: 'klod'}, {name: 'por'}]
+  const data = [{name: 'klod'}, {name: 'por'}, {name: 'ploi'}]
   res.json({success: 'get call succeed!', url: req.url, data});
 });
 
