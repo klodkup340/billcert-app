@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/item",
+            "lambdaFunction": "mainlambda",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/item"
+        }
+    ],
+    "resourceName": "mainlambda",
+    "apiName": "mainlambda",
+    "functionArns": [
+        {
+            "lambdaFunction": "mainlambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-billcert-staging-225831-authRole",
+        "unAuthRoleName": "amplify-billcert-staging-225831-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "mainlambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
