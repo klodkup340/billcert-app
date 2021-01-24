@@ -7,6 +7,13 @@
                 "open": true
             },
             "policyResourceName": "/item"
+        },
+        {
+            "name": "/createtable",
+            "lambdaFunction": "mainlambda",
+            "privacy": {
+                "open": true
+            }
         }
     ],
     "resourceName": "mainlambda",
@@ -31,5 +38,6 @@
                 "Arn"
             ]
         }
-    ]
+    ],
+    "uuid": "1fe9a939"
 }

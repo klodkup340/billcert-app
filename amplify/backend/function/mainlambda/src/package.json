@@ -4,10 +4,15 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "amazon-qldb-driver-nodejs": "^2.1.0",
+    "aws-sdk": "^2.831.0",
     "aws-serverless-express": "^3.3.5",
     "axios": "^0.21.1",
     "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "https": "^1.0.0",
+    "ion-js": "^4.0.0",
+    "jsbi": "^3.1.2"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,10 +1,10 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+const express = require('express')
+const bodyParser = require('body-parser')
+const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const axios = require('axios');
 
 // declare a new express app
-var app = express()
+const app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
@@ -15,45 +15,75 @@ app.use(function (req, res, next) {
   next()
 });
 
+// Testing api&function
 app.get('/item', async (req, res) => {
   const data = await axios.get('https://swapi.dev/api/people/');
   res.json({ success: 'get call succeed!', url: req.url, result: data.data.results });
 });
 
-app.get('/item/*', function (req, res) {
-  // Add your code here
-  res.json({ success: 'get call succeed!', url: req.url });
-});
+// QLDB configuration
+const qldb = require('amazon-qldb-driver-nodejs');
+const https = require('https');
 
-app.post('/item', function (req, res) {
-  // Add your code here
-  res.json({ success: 'post call succeed!', url: req.url, body: req.body })
-});
+const maxConcurrentTransactions = 50;
 
-app.post('/item/*', function (req, res) {
-  // Add your code here
-  res.json({ success: 'post call succeed!', url: req.url, body: req.body })
-});
+const agentForQldb = new https.Agent({
+  "keepAlive": true,
+  //Set this to the same value as `maxConcurrentTransactions
+  //Do not rely on the default value of `Infinity`
+  "maxSockets": maxConcurrentTransactions
+ });
+const serviceConfiguration = { "httpOptions": {
+  "agent": agentForQldb
+ }};
 
-app.put('/item', function (req, res) {
-  // Add your code here
-  res.json({ success: 'put call succeed!', url: req.url, body: req.body })
-});
+let driver = new qldb.QldbDriver("billcert-ledger-1", serviceConfiguration,maxConcurrentTransactions);
 
-app.put('/item/*', function (req, res) {
-  // Add your code here
-  res.json({ success: 'put call succeed!', url: req.url, body: req.body })
-});
+// QLDB functions
 
-app.delete('/item', function (req, res) {
-  // Add your code here
-  res.json({ success: 'delete call succeed!', url: req.url });
-});
+app.get('/createtable', async (req, res) => {
+  await driver.executeLambda(async (txn) => {
+    await txn.execute("CREATE TABLE invoice")
+  });
+  await new Promise(resolve => setTimeout(resolve, 3000))
+  console.log('Create table invoice');
+  driver.close()
+})
 
-app.delete('/item/*', function (req, res) {
-  // Add your code here
-  res.json({ success: 'delete call succeed!', url: req.url });
-});
+// app.get('/item/*', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'get call succeed!', url: req.url });
+// });
+
+// app.post('/item', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'post call succeed!', url: req.url, body: req.body })
+// });
+
+// app.post('/item/*', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'post call succeed!', url: req.url, body: req.body })
+// });
+
+// app.put('/item', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'put call succeed!', url: req.url, body: req.body })
+// });
+
+// app.put('/item/*', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'put call succeed!', url: req.url, body: req.body })
+// });
+
+// app.delete('/item', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'delete call succeed!', url: req.url });
+// });
+
+// app.delete('/item/*', function (req, res) {
+//   // Add your code here
+//   res.json({ success: 'delete call succeed!', url: req.url });
+// });
 
 app.listen(3000, function () {
   console.log("App started")
