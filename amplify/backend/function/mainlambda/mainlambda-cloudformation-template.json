@@ -68,8 +68,8 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-billcert-staging-225831-deployment",
-          "S3Key": "amplify-builds/mainlambda-53323775686b42333645-build.zip"
+          "S3Bucket": "amplify-billcert-staging-230337-deployment",
+          "S3Key": "amplify-builds/mainlambda-4848794b6a6a73696753-build.zip"
         }
       }
     },
